@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: apigateway
+    image: apigateway:1.0.0
+    env_file: .env
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: yarn start:docker
+    networks:
+      - default
+    ports:
+      - $PORT:$PORT
+    volumes:
+      - .:/usr/src/apigateway
+    restart: unless-stopped
+  prod:
+    container_name: apigateway-prod
+    image: apigateway:1.0.0
+    env_file:
+      - .env
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: yarn start:prod
+    ports:
+      - $PORT:$PORT
+    networks:
+      - default
+    volumes:
+      - .:/usr/src/apigateway
+    restart: unless-stopped
+
+networks:
+    default:
+      external: true
+      name: application

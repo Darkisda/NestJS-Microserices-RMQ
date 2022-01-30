@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: auth
+    image: auth:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: yarn start:docker
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - default
+      - auth-network
+    volumes:
+      - .:/usr/src/auth
+    restart: unless-stopped
+  prod:
+    container_name: auth-prod
+    image: auth:1.0.0
+    env_file:
+      - .env
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: yarn start:prod
+    networks:
+      - default
+      - auth-network
+    volumes:
+      - .:/usr/src/auth
+    restart: unless-stopped
+  mongodb:
+    image : mongo:latest
+    env_file:
+      - .env
+    container_name: $DB_HOST
+    volumes:
+      - mongodata:/data/db
+    command: mongod --port $DB_PORT
+    ports:
+      - $DB_PORT:$DB_PORT
+    networks:
+      - auth-network
+    restart: always
+
+networks:
+    auth-network:
+      driver: bridge
+    default:
+      external: true
+      name: application
+
+volumes:
+  mongodata:
