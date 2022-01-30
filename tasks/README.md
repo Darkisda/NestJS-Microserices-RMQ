@@ -18,7 +18,7 @@ RMQ_HOST=
 ```
 
 To run in docker, create a `.env` file name.
-To run locally, create a `.lcl.env` file name
+To run locally, create a `.local.env` file name
 
 ## Without Docker
 
