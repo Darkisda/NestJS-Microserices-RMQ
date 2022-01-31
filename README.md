@@ -72,10 +72,11 @@ $ npm run start:debug
 ## Docker
 To run using docker container
 
-### Project Source Directory
+### RabbitMQ
 First you need to run the RabbitMQ image as docker-compose so that your network is shared by everyone.
 
 ```bash
+$ cd ./infra/rmq
 $ docker-compose up
 ```
 
